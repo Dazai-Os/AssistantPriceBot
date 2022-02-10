@@ -6,6 +6,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from tgbot.config import load_config
+from AssistantPriceBot import db
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.url import register_url
@@ -42,6 +43,7 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
 
+
     bot['config'] = config
 
     register_all_middlewares(dp)
@@ -50,11 +52,13 @@ async def main():
 
     # start
     try:
+        await db.create()
+        await db.create_table_users()
         await dp.start_polling()
     finally:
         await dp.storage.close()
         await dp.storage.wait_closed()
-        await bot.session.close()
+        await bot.get_session()
 
 
 if __name__ == '__main__':
