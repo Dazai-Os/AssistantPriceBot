@@ -57,3 +57,10 @@ class Database:
         INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price, track) VALUES($1, $2, $3, $4, $5, $6)
         """
         await self.execute(sql, id_users, url_product, name_product, now_price, now_price, track, fetchrow = True)
+
+    async def view_product(self, id_users):
+        sql = """
+        SELECT url_product, name_product, now_price
+        FROM assistant_price_db
+        WHERE id_users = """ + str(id_users)
+        return await self.execute(sql, fetch = True)
