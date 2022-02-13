@@ -21,14 +21,22 @@ async def url_start(message: types.Message):
 
 async def send_product_url(message: types.MessageEntity, state: FSMContext):
     await Price_product.next()
-    await add_user_product(message)
-    await message.reply("Товар успешно отслеживается")
+    test_main = await add_user_product(message)
+    if test_main == True:
+        await message.reply("Товар успешно отслеживается")
+    else:
+        await message.reply("Товар уже отслеживается")
+
 
 
 async def add_user_product(message):
     name_product, now_price = await citilink(message)
-    track = True
-    await db.add_user_product(int(message.from_user.id), str(message.text), str(name_product), str(now_price), bool(track))
+    test = await db.add_user_product_db(int(message.from_user.id), str(message.text), str(name_product), str(now_price))
+    if test == True:
+        return True
+    else:
+        return False
+
 
 
 async def citilink(message):

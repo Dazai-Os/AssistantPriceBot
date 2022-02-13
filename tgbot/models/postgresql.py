@@ -46,17 +46,34 @@ class Database:
         url_product TEXT NULL,
         name_product TEXT NULL,
         now_price TEXT NULL,
-        old_price TEXT NULL,
-        track BOOLEAN NOT NULL
+        old_price TEXT NULL
         );
         """
         await self.execute(sql, execute=True)
-    
-    async def add_user_product(self, id_users, url_product, name_product, now_price,track):
-        sql = """
-        INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price, track) VALUES($1, $2, $3, $4, $5, $6)
+
+    async def add_user_product_db(self, id_users, url_product, name_product, now_price):
+        sql_check = """
+        SELECT id_users, url_product, name_product
+        FROM assistant_price_db
         """
-        await self.execute(sql, id_users, url_product, name_product, now_price, now_price, track, fetchrow = True)
+        check_dublicate = await self.execute(sql_check,fetch = True)
+
+        result = True
+
+        for i in check_dublicate:
+            if (i[0] == id_users) and (i[1] == url_product) and (i[2] == name_product):
+                result = False
+            
+        if result == True:
+                sql = """
+                INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price) VALUES($1, $2, $3, $4, $5)
+                """
+                await self.execute(sql, id_users, url_product, name_product, now_price, now_price, execute = True)
+                return True
+        else:
+            return False
+
+            
 
     async def view_product(self, id_users):
         sql = """
