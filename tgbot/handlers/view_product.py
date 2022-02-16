@@ -1,10 +1,7 @@
-from aiogram import types, Dispatcher
-from aiogram.dispatcher import FSMContext
+from aiogram import Dispatcher
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.utils.markdown import hcode
-from aiogram.dispatcher.filters import Text
-from AssistantPriceBot import dp
 from AssistantPriceBot import db
+
 
 class View_product(StatesGroup):
     waiting_for_view = State()

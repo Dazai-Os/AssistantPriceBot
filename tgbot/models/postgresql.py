@@ -52,11 +52,8 @@ class Database:
         await self.execute(sql, execute=True)
 
     async def add_user_product_db(self, id_users, url_product, name_product, now_price):
-        sql_check = """
-        SELECT id_users, url_product, name_product
-        FROM assistant_price_db
-        """
-        check_dublicate = await self.execute(sql_check,fetch = True)
+        check_dublicate = await self.get_url_price()
+
 
         result = True
 
@@ -64,7 +61,7 @@ class Database:
             if (i[0] == id_users) and (i[1] == url_product) and (i[2] == name_product):
                 result = False
             
-        if result == True:
+        if result:
                 sql = """
                 INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price) VALUES($1, $2, $3, $4, $5)
                 """
@@ -80,4 +77,11 @@ class Database:
         SELECT url_product, name_product, now_price
         FROM assistant_price_db
         WHERE id_users = """ + str(id_users)
+        return await self.execute(sql, fetch = True)
+
+    async def get_url_price(self):
+        sql = """ 
+        SELECT id_users, url_product, name_product, now_price
+        FROM assistant_price_db
+        """
         return await self.execute(sql, fetch = True)

@@ -1,6 +1,7 @@
 from aiogram import Dispatcher, Bot
 from aiogram.dispatcher import storage
 from tgbot.config import load_config
+import asyncio
 
 from tgbot.models.postgresql import Database
 

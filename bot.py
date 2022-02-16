@@ -14,6 +14,8 @@ from tgbot.handlers.user import register_user
 from tgbot.handlers.view_product import register_view_pr
 from tgbot.middlewares.db import DbMiddleware
 
+from tgbot.misc.tracking_price import check_price
+
 logger = logging.getLogger(__name__)
 
 
@@ -44,18 +46,24 @@ async def main():
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
 
-
     bot['config'] = config
 
     register_all_middlewares(dp)
     register_all_filters(dp)
     register_all_handlers(dp)
 
+    
+
     # start
     try:
         await db.create()
         await db.create_table_users()
+
+        loop_track = asyncio.get_event_loop()
+        asyncio.ensure_future(check_price(loop_track))
+        
         await dp.start_polling()
+        loop_track = asyncio.get_event_loop()
     finally:
         await dp.storage.close()
         await dp.storage.wait_closed()

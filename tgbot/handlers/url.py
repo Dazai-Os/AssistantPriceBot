@@ -22,7 +22,7 @@ async def url_start(message: types.Message):
 async def send_product_url(message: types.MessageEntity, state: FSMContext):
     await Price_product.next()
     test_main = await add_user_product(message)
-    if test_main == True:
+    if test_main:
         await message.reply("Товар успешно отслеживается")
     else:
         await message.reply("Товар уже отслеживается")
@@ -30,9 +30,10 @@ async def send_product_url(message: types.MessageEntity, state: FSMContext):
 
 
 async def add_user_product(message):
-    name_product, now_price = await citilink(message)
+    link = message.text
+    name_product, now_price = await citilink(link)
     test = await db.add_user_product_db(int(message.from_user.id), str(message.text), str(name_product), str(now_price))
-    if test == True:
+    if test:
         return True
     else:
         return False
@@ -40,7 +41,7 @@ async def add_user_product(message):
 
 
 async def citilink(message):
-    link = message.text
+    link = str(message)
     responce = requests.get(link)
     soup = BeautifulSoup(responce.text, 'lxml')
     block = soup.find('div', class_ = "ProductCardLayout__product-description")
