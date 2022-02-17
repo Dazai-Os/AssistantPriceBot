@@ -9,6 +9,7 @@ from tgbot.config import load_config
 from AssistantPriceBot import db
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
+from tgbot.handlers.help import register_help
 from tgbot.handlers.url import register_url
 from tgbot.handlers.user import register_user
 from tgbot.handlers.view_product import register_view_pr
@@ -31,6 +32,7 @@ def register_all_handlers(dp):
     register_admin(dp)
     register_user(dp)
     register_view_pr(dp)
+    register_help(dp)
     register_url(dp)
 
 

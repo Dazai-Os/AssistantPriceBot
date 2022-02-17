@@ -2,8 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-import requests
-from bs4 import BeautifulSoup
+from aiogram.utils.callback_data import CallbackData
 from AssistantPriceBot import db
 from tgbot.misc.parser import citilink
 
@@ -14,7 +13,7 @@ class Price_product(StatesGroup):
 
 async def url_start(message: types.Message):
     await Price_product.waiting_for_url.set()
-    await message.reply("Отправьте ссылку и товар будет отслеживаться: ")
+    await message.answer("Отправьте ссылку и товар будет отслеживаться:")
 
 
 async def send_product_url(message: types.MessageEntity, state: FSMContext):

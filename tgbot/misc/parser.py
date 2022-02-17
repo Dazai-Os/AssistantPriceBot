@@ -10,5 +10,5 @@ async def citilink(link):
 
     name_product = block.find('h1', class_ = "Heading Heading_level_1 ProductHeader__title")
 
-    return [name_product.get_text(strip = True), price.get_text(strip = True)]    
+    return name_product.get_text(strip = True), price.get_text(strip = True)  
     
