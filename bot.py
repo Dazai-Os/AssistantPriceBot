@@ -61,7 +61,7 @@ async def main():
 
         loop_track = asyncio.get_event_loop()
         asyncio.ensure_future(check_price(loop_track))
-        
+
         await dp.start_polling()
         loop_track = asyncio.get_event_loop()
     finally:

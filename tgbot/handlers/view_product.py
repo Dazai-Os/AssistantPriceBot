@@ -1,4 +1,5 @@
 from aiogram import Dispatcher
+from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from AssistantPriceBot import db
 
@@ -18,3 +19,4 @@ async def view_start(message):
 
 def register_view_pr(dp: Dispatcher):
     dp.register_message_handler(view_start, commands="view_all_products")
+    dp.register_message_handler(view_start, Text(equals="Просмотр товаров"))

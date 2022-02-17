@@ -1,6 +1,6 @@
 import asyncio
-from tgbot.handlers.url import citilink
 from AssistantPriceBot import db, bot
+from .parser import citilink
 
 
 async def sleep_for_check_price():

@@ -1,9 +1,11 @@
 from aiogram import Dispatcher
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardRemove
+from tgbot.keyboards.reply import menu
+from aiogram.dispatcher.filters import Text
 
 
 async def user_start(message: Message):
-    await message.reply("Привет пользователь. Выбери команду из предложенных и начаинай пользоваться!")
+    await message.answer("Привет пользователь. Выбери команду из предложенных и начаинай пользоваться!", reply_markup=menu)
 
 
 def register_user(dp: Dispatcher):

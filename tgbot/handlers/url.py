@@ -1,13 +1,11 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.utils.markdown import hcode
 from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher.filters.state import State, StatesGroup
 import requests
 from bs4 import BeautifulSoup
-from AssistantPriceBot import dp
 from AssistantPriceBot import db
-
+from tgbot.misc.parser import citilink
 
 
 class Price_product(StatesGroup):
@@ -40,20 +38,7 @@ async def add_user_product(message):
 
 
 
-async def citilink(message):
-    link = str(message)
-    responce = requests.get(link)
-    soup = BeautifulSoup(responce.text, 'lxml')
-    block = soup.find('div', class_ = "ProductCardLayout__product-description")
-    price = block.find('span', class_ = "ProductHeader__price-default_current-price js--ProductHeader__price-default_current-price")
-
-    name_product = block.find('h1', class_ = "Heading Heading_level_1 ProductHeader__title")
-
-    return name_product.get_text(strip = True), price.get_text(strip = True)
-
-
-
-
 def register_url(dp: Dispatcher):
     dp.register_message_handler(url_start, commands = 'send_product_url')
+    dp.register_message_handler(url_start, Text(equals='Отправить url товара'))
     dp.register_message_handler(send_product_url, state = Price_product.waiting_for_url)
