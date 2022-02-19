@@ -2,8 +2,8 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from aiogram.utils.callback_data import CallbackData
 from AssistantPriceBot import db
+from aiogram.dispatcher.handler import CancelHandler
 from tgbot.misc.parser import citilink
 
 
@@ -29,8 +29,12 @@ async def send_product_url(message: types.MessageEntity, state: FSMContext):
 
 async def add_user_product(message):
     link = message.text
-    name_product, now_price = await citilink(link)
-    test = await db.add_user_product_db(int(message.from_user.id), str(message.text), str(name_product), str(now_price))
+    if "https://www.citilink.ru" in str(link):
+        name_product, now_price = await citilink(link)
+        test = await db.add_user_product_db(int(message.from_user.id), str(message.text), str(name_product), str(now_price))
+    else:
+        await message.reply("Вы прислали некоректную ссылку")
+        raise CancelHandler()
     if test:
         return True
     else:

@@ -74,14 +74,18 @@ class Database:
 
     async def view_product(self, id_users):
         sql = """
-        SELECT url_product, name_product, now_price
+        SELECT url_product, name_product, now_price, old_price
         FROM assistant_price_db
         WHERE id_users = """ + str(id_users)
         return await self.execute(sql, fetch = True)
 
     async def get_url_price(self):
         sql = """ 
-        SELECT id_users, url_product, name_product, now_price
+        SELECT id_users, url_product, name_product, now_price, id_number
         FROM assistant_price_db
         """
         return await self.execute(sql, fetch = True)
+
+    async def update_price(self, new_price, old_price, id_number):
+        sql = f"UPDATE assistant_price_db SET now_price = '{new_price}', old_price = '{old_price}' WHERE id_number = {id_number}"
+        await self.execute(sql, execute = True)

@@ -55,7 +55,7 @@ async def main():
         await db.create_table_users()
 
         loop_track = asyncio.get_event_loop()
-        asyncio.ensure_future(check_price(loop_track))
+        asyncio.ensure_future(check_price())
         
         await dp.start_polling()
         loop_track = asyncio.get_event_loop()
