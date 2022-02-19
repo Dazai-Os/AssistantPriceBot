@@ -13,7 +13,7 @@ async def view_start(message):
     auto_number = 1
     for i in answer_view:
         result = str(auto_number) + "." + i[1] + " - " + i[2] + '. Прошлая цена ' + i[3] 
-        keyboard = await view_keyboard(i[0])
+        keyboard = await view_keyboard(i[0], message)
         await message.answer(result, reply_markup = keyboard)
         auto_number += 1
     

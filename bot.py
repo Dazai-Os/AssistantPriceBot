@@ -7,6 +7,7 @@ from tgbot.config import load_config
 from AssistantPriceBot import db
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
+from tgbot.handlers.delete_products import register_callback_handler
 from tgbot.handlers.help import register_help
 from tgbot.handlers.url import register_url
 from tgbot.handlers.user import register_user
@@ -30,6 +31,7 @@ def register_all_handlers(dp):
     register_view_pr(dp)
     register_help(dp)
     register_url(dp)
+    register_callback_handler(dp)
 
 async def main():
     logging.basicConfig(

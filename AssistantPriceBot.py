@@ -7,5 +7,5 @@ from tgbot.models.postgresql import Database
 
 config = load_config(".env")
 bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
-dp = Dispatcher(bot, storage=storage)
 db = Database()
+dp = Dispatcher(bot, storage=storage)

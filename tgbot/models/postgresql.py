@@ -89,3 +89,7 @@ class Database:
     async def update_price(self, new_price, old_price, id_number):
         sql = f"UPDATE assistant_price_db SET now_price = '{new_price}', old_price = '{old_price}' WHERE id_number = {id_number}"
         await self.execute(sql, execute = True)
+    
+    async def delete_product_db(self, id_user, url_product):
+        sql = f"DELETE FROM assistant_price_db WHERE id_users = {id_user} AND url_product = '{url_product}'"
+        await self.execute(sql, execute = True)
