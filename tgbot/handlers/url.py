@@ -12,12 +12,13 @@ class Price_product(StatesGroup):
 
 
 async def url_start(message: types.Message):
-    await Price_product.waiting_for_url.set()
     await message.answer("Отправьте ссылку и товар будет отслеживаться:")
+    await Price_product.waiting_for_url.set()
 
 
 async def send_product_url(message: types.MessageEntity, state: FSMContext):
     await Price_product.next()
+
     test_main = await add_user_product(message)
     if test_main:
         await message.reply("Товар успешно отслеживается")
