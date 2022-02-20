@@ -3,13 +3,16 @@ from typing import Union
 import asyncpg
 from asyncpg.connection import Connection
 from asyncpg.pool import Pool
+
 from tgbot.config import load_config
 
 class Database:
 
+
     def __init__(self):
         self.pool: Union[Pool, None] =  None
 
+    #Create a connection to the database
     async def create(self):
         config = load_config(".env")
         self.pool = await asyncpg.create_pool(
@@ -19,7 +22,8 @@ class Database:
             database=config.db.database,
         )
 
-    async def execute (self, command, *args, 
+    #sql query processor
+    async def execute (self, command, *args,
                        fetch: bool = False,
                        fetchval: bool = False,
                        fetchrow: bool = False,
@@ -37,59 +41,52 @@ class Database:
                 elif execute:
                     result = await connection.execute(command, *args)
             return result
-    
+
+    #create main table
     async def create_table_users(self):
-        sql = """
-        CREATE TABLE IF NOT EXISTS Assistant_Price_DB(
-        id_number SERIAL PRIMARY KEY,
-        id_users BIGINT NOT NULL,
-        url_product TEXT NULL,
-        name_product TEXT NULL,
-        now_price TEXT NULL,
-        old_price TEXT NULL
-        );
-        """
+        sql="""
+                CREATE TABLE IF NOT EXISTS Assistant_Price_DB(
+                id_number SERIAL PRIMARY KEY,
+                id_users BIGINT NOT NULL,
+                url_product TEXT NULL,
+                name_product TEXT NULL,
+                now_price TEXT NULL,
+                old_price TEXT NULL
+                );
+            """
         await self.execute(sql, execute=True)
 
     async def add_user_product_db(self, id_users, url_product, name_product, now_price):
         check_dublicate = await self.get_url_price()
-
-
         result = True
-
         for i in check_dublicate:
             if (i[0] == id_users) and (i[1] == url_product) and (i[2] == name_product):
                 result = False
-            
-        if result:
-                sql = """
-                INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price) VALUES($1, $2, $3, $4, $5)
-                """
-                await self.execute(sql, id_users, url_product, name_product, now_price, now_price, execute = True)
-                return True
-        else:
-            return False
 
-            
+        if result:
+            sql="""
+                    INSERT INTO assistant_price_db (id_users, url_product, name_product, now_price, old_price) VALUES($1, $2, $3, $4, $5)
+                """
+            await self.execute(sql, id_users, url_product, name_product, now_price, now_price, execute = True)
+            return True
+
+        return False
 
     async def view_product(self, id_users):
-        sql = """
-        SELECT url_product, name_product, now_price, old_price
-        FROM assistant_price_db
-        WHERE id_users = """ + str(id_users)
+        sql= f"SELECT url_product, name_product, now_price, old_priceFROM assistant_price_db WHERE id_users = {str(id_users)}"
         return await self.execute(sql, fetch = True)
 
     async def get_url_price(self):
-        sql = """ 
-        SELECT id_users, url_product, name_product, now_price, id_number
-        FROM assistant_price_db
-        """
+        sql="""
+                SELECT id_users, url_product, name_product, now_price, id_number
+                FROM assistant_price_db
+            """
         return await self.execute(sql, fetch = True)
 
     async def update_price(self, new_price, old_price, id_number):
         sql = f"UPDATE assistant_price_db SET now_price = '{new_price}', old_price = '{old_price}' WHERE id_number = {id_number}"
         await self.execute(sql, execute = True)
-    
+
     async def delete_product_db(self, id_user, url_product):
         sql = f"DELETE FROM assistant_price_db WHERE id_users = {id_user} AND url_product = '{url_product}'"
         await self.execute(sql, execute = True)

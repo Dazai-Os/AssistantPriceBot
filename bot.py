@@ -1,10 +1,13 @@
 import asyncio
 import logging
+
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from tgbot.config import load_config
+
+#import from the current project
 from AssistantPriceBot import db
+from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.delete_products import register_callback_handler
@@ -18,20 +21,23 @@ from tgbot.misc.tracking_price import check_price
 
 logger = logging.getLogger(__name__)
 
-def register_all_middlewares(dp):
+def register_all_middlewares(dp: Dispatcher):
     dp.setup_middleware(DbMiddleware())
     dp.setup_middleware(AntiFlood())
 
-def register_all_filters(dp):
+
+def register_all_filters(dp: Dispatcher):
     dp.filters_factory.bind(AdminFilter)
 
-def register_all_handlers(dp):
+
+def register_all_handlers(dp: Dispatcher):
     register_admin(dp)
     register_user(dp)
     register_view_pr(dp)
     register_help(dp)
     register_url(dp)
     register_callback_handler(dp)
+
 
 async def main():
     logging.basicConfig(
@@ -44,23 +50,21 @@ async def main():
     storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
     bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(bot, storage=storage)
-
     bot['config'] = config
 
     register_all_middlewares(dp)
     register_all_filters(dp)
     register_all_handlers(dp)
 
-    
     try:
         await db.create()
         await db.create_table_users()
 
-        loop_track = asyncio.get_event_loop()
+        #create thread for tracking_price
         asyncio.ensure_future(check_price())
-        
+
+        #start main thread
         await dp.start_polling()
-        loop_track = asyncio.get_event_loop()
     finally:
         await dp.storage.close()
         await dp.storage.wait_closed()
