@@ -59,7 +59,7 @@ ____
 `python bot.py`
 
 
-##Примечание
+## Примечание
 Бот парсит ссылки только с ситилинка и такого формата
 
 [Пример ссылки](https://www.citilink.ru/product/smartfon-apple-iphone-11-mhdn3ru-a-zelenyi-1429424/)
