@@ -73,7 +73,7 @@ class Database:
         return False
 
     async def view_product(self, id_users):
-        sql= f"SELECT url_product, name_product, now_price, old_priceFROM assistant_price_db WHERE id_users = {str(id_users)}"
+        sql= f"SELECT url_product, name_product, now_price, old_price FROM assistant_price_db WHERE id_users = {str(id_users)}"
         return await self.execute(sql, fetch = True)
 
     async def get_url_price(self):
