@@ -63,4 +63,7 @@ ____
 Бот парсит ссылки только с ситилинка и такого формата
 
 [Пример ссылки](https://www.citilink.ru/product/smartfon-apple-iphone-11-mhdn3ru-a-zelenyi-1429424/)
+
 https://www.citilink.ru/product/smartfon-apple-iphone-11-mhdn3ru-a-zelenyi-1429424/
+
+![](https://github.com/Dazai-Os/AssistantPricebot/blob/master/other/photo_2022-02-20_21-21-16.jpg)
