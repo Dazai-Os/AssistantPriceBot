@@ -57,3 +57,10 @@ ____
 в консоле находясь в корневой папке бота запустите скрипт bot.py
 
 `python bot.py`
+
+
+##Примечание
+Бот парсит ссылки только с ситилинка и такого формата
+
+[Пример ссылки](https://www.citilink.ru/product/smartfon-apple-iphone-11-mhdn3ru-a-zelenyi-1429424/)
+https://www.citilink.ru/product/smartfon-apple-iphone-11-mhdn3ru-a-zelenyi-1429424/
