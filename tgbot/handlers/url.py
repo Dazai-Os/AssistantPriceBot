@@ -13,7 +13,7 @@ class PriceProduct(StatesGroup):
 
 #message handler start
 async def url_start(message: types.Message):
-    await message.answer("Отправьте ссылку и товар будет отслеживаться:")
+    await message.answer("Отправьте ссылку с ситилинка и товар будет отслеживаться(Пример ссылки - https://www.citilink.ru/product/holodilnik-lg-ga-b509cetl-bezhevyi-1387047/):")
     await PriceProduct.waiting_for_url.set()
 
 
